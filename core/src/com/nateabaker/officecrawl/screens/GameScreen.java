@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
 
         
         SaveMap.makeDungeon();
-        tiledMap = new TmxMapLoader().load("maps/text.tmx");
+        tiledMap = new TmxMapLoader().load("Maps/test.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 0.03125f);
         
         world = new World(new Vector2(0, 0), true);

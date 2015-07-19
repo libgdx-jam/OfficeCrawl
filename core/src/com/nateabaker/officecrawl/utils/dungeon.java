@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.MathUtils;
 
-public class dungeon {
+public class Dungeon {
 
 	// size of the map
 	private int xsize = 0;
@@ -16,8 +16,8 @@ public class dungeon {
 	// define the %chance to generate either a room or a corridor on the map
 	// BTW, rooms are 1st priority so actually it's enough to just define the
 	// chance of generating a room
-	private int chanceRoom = 90;
-	private int chanceCorridor = 10;
+	private int chanceRoom = 100;
+	private int chanceCorridor = 0;
 
 	// our map
 	private int[] dungeon_map = {};
@@ -26,16 +26,85 @@ public class dungeon {
 	private long oldseed = 0;
 
 	// a list over tile types we're using
-	final private int tileUnused = 1;
-	final private int tileDirtWall = 2; // not in use
-	final private int tileDirtFloor = 3;
-	final private int tileStoneWall = 4;
-	final private int tileCorridor = 5;
-	final private int tileDoor = 6;	
-	final private int tileUpStairs = 7;
-	final private int tileDownStairs = 8;
-	final private int tileChest = 9;
+	final private int VOID_1 = 1;
+	final private int VOID_2 = 2;
+	final private int TOP_RIGHT_INSIDE = 3;
+	final private int TOP_LEFT_INSIDE = 4;
+	final private int BOTTOM_LEFT_INSIDE = 5;
+	final private int BOTTOM_RIGHT_INSIDE = 6;
+	final private int TOP_RIGHT_OUTSIDE = 7;
+	final private int TOP_LEFT_OUTSIDE = 8;
+	final private int BOTTOM_LEFT_OUTSIDE = 9;
+	final private int BOTTOM_RIGHT_OUTSIDE = 10;
 
+	final private int LEFT_WALL_1 = 11;
+	final private int LEFT_WALL_2 = 12;
+	final private int LEFT_WALL_3 = 13;
+	final private int LEFT_WALL_4 = 14;
+	final private int LEFT_WALL_5 = 15;
+	final private int LEFT_WALL_6 = 16;
+	final private int LEFT_WALL_7 = 17;
+	final private int LEFT_WALL_8 = 18;
+	final private int LEFT_WALL_9 = 19;
+	final private int LEFT_WALL_10 = 20;
+
+	final private int RIGHT_WALL_1 = 21;
+	final private int RIGHT_WALL_2 = 22;
+	final private int RIGHT_WALL_3 = 23;
+	final private int RIGHT_WALL_4 = 24;
+	final private int RIGHT_WALL_5 = 25;
+	final private int RIGHT_WALL_6 = 26;
+	final private int RIGHT_WALL_7 = 27;
+	final private int RIGHT_WALL_8 = 28;
+	final private int RIGHT_WALL_9 = 29;
+	final private int RIGHT_WALL_10 = 30;
+
+	final private int TOP_WALL_1 = 31;
+	final private int TOP_WALL_2 = 32;
+	final private int TOP_WALL_3 = 33;
+	final private int TOP_WALL_4 = 34;
+	final private int TOP_WALL_5 = 35;
+	final private int TOP_WALL_6 = 36;
+	final private int TOP_WALL_7 = 37;
+	final private int TOP_WALL_8 = 38;
+	final private int TOP_WALL_9 = 39;
+	final private int TOP_WALL_10 = 40;
+
+	final private int BOTTOM_WALL_1 = 41;
+	final private int BOTTOM_WALL_2 = 42;
+	final private int BOTTOM_WALL_3 = 43;
+	final private int BOTTOM_WALL_4 = 54;
+	final private int BOTTOM_WALL_5 = 45;
+	final private int BOTTOM_WALL_6 = 46;
+	final private int BOTTOM_WALL_7 = 47;
+	final private int BOTTOM_WALL_8 = 48;
+	final private int BOTTOM_WALL_9 = 49;
+	final private int BOTTOM_WALL_10 = 50;
+
+	final private int FLOOR_1_1 = 51;
+	final private int FLOOR_1_2 = 52;
+	final private int FLOOR_1_3 = 53;
+	final private int FLOOR_1_4 = 54;
+	final private int FLOOR_1_5 = 55;
+	final private int FLOOR_1_6 = 56;
+	final private int FLOOR_1_7 = 57;
+	final private int FLOOR_1_8 = 58;
+	final private int FLOOR_1_9 = 59;
+	final private int FLOOR_1_10 = 50;
+
+	final private int FLOOR_2_1 = 61;
+	final private int FLOOR_2_2 = 62;
+	final private int FLOOR_2_3 = 63;
+	final private int FLOOR_2_4 = 64;
+	final private int FLOOR_2_5 = 65;
+	final private int FLOOR_2_6 = 66;
+	final private int FLOOR_2_7 = 67;
+	final private int FLOOR_2_8 = 68;
+	final private int FLOOR_2_9 = 69;
+	final private int FLOOR_2_10 = 70;
+	
+	final private int tileDoor = 79;
+	
 	// misc. messages to print
 	private String msgXSize = "X size of dungeon: \t";
 	private String msgYSize = "Y size of dungeon: \t";
@@ -43,10 +112,31 @@ public class dungeon {
 	private String msgNumObjects = "# of objects made: \t";
 	private String msgHelp = "";
 	private String msgDetailedHelp = "";
-	
+
 	private int roomList[][];
 	private int currentRoom = 0;
+	
+	// setting a tile's type
+	private void setCell(int x, int y, int celltype) {
+		dungeon_map[x + xsize * y] = celltype;
+	}
 
+	// returns the type of a tile
+	private int getCell(int x, int y) {
+		return dungeon_map[x + xsize * y];
+	}
+	
+	private boolean isFloor(int x, int y){
+		if(getCell(x, y) < 51 && getCell(x, y) > 70)
+			return true;
+		else
+			return false;
+	}
+
+	public int[] getDungeon() {
+		return dungeon_map;
+	}
+	
 	void createDungeon(int inx, int iny, int inobj) {
 		/*******************************************************************************/
 		// Here's the one generating the whole map
@@ -72,24 +162,30 @@ public class dungeon {
 
 		// redefine the map var, so it's adjusted to our new map size
 		dungeon_map = new int[xsize * ysize];
-		roomList = new int[inobj][4];
-
+		
+		//fill level with void -nate
+		for (int y = 0; y < ysize; y++) {
+			for (int x = 0; x < xsize; x++) {
+				setCell(x, y, VOID_1);
+			}
+		}
+		
 		// start with making the "standard stuff" on the map
 		for (int y = 0; y < ysize; y++) {
 			for (int x = 0; x < xsize; x++) {
 				// ie, making the borders of unwalkable walls
 				if (y == 0)
-					setCell(x, y, tileStoneWall);
+					setCell(x, y, VOID_2);
 				else if (y == ysize - 1)
-					setCell(x, y, tileStoneWall);
+					setCell(x, y, VOID_2);
 				else if (x == 0)
-					setCell(x, y, tileStoneWall);
+					setCell(x, y, VOID_2);
 				else if (x == xsize - 1)
-					setCell(x, y, tileStoneWall);
+					setCell(x, y, VOID_2);
 
 				// and fill the rest with dirt
 				else
-					setCell(x, y, tileUnused);
+					setCell(x, y, VOID_2);
 			}
 		}
 
@@ -101,56 +197,56 @@ public class dungeon {
 
 		// start with making a room in the middle, which we can start building
 		// upon
-		makeRoom(xsize / 2, ysize / 2, 8, 6, getRand(0, 3));
+			makeRoom(xsize / 2, ysize / 2, 8, 6, getRand(0, 3));
 
 		// keep count of the number of "objects" we've made
-		int currentFeatures = 1; // +1 for the first room we just made
+			int currentFeatures = 1; // +1 for the first room we just made
 
 		// then we start the main loop
-		for (int countingTries = 0; countingTries < 1000; countingTries++) {
+			for (int countingTries = 0; countingTries < 1000; countingTries++) {
 
 
 			// check if we've reached our quota
-			if (currentFeatures == objects) {
-				break;
-			}
+				if (currentFeatures == objects) {
+					break;
+				}
 
 			// start with a random wall
-			int newx = 0;
-			int xmod = 0;
-			int newy = 0;
-			int ymod = 0;
-			int validTile = -1;
+				int newx = 0;
+				int xmod = 0;
+				int newy = 0;
+				int ymod = 0;
+				int validTile = -1;
 
 			// 1000 chances to find a suitable object (room or corridor)..
 			// (yea, i know it's kinda ugly with a for-loop... -_-')
 
-			for (int testing = 0; testing < 1000; testing++) {
-				newx = getRand(1, xsize - 1);
-				newy = getRand(1, ysize - 1);
-				validTile = -1;
-
+				for (int testing = 0; testing < 1000; testing++) {
+					newx = getRand(1, xsize - 1);
+					newy = getRand(1, ysize - 1);
+					validTile = -1;
+				
 				 System.out.println("tempx: " + newx + "\ttempy: " + newy);
 
-				if (getCell(newx, newy) == tileDirtWall || getCell(newx, newy) == tileCorridor) {
+				if (isFloor(newx, newy) ||isFloor(newx, newy)) {
 					// check if we can reach the place
-					if (getCell(newx, newy + 1) == tileDirtFloor || getCell(newx, newy + 1) == tileCorridor) {
+					if (isFloor(newx, newy + 1) || isFloor(newx, newy + 1)) {
 						validTile = 0; //
 						xmod = 0;
 						ymod = -1;
-					} else if (getCell(newx - 1, newy) == tileDirtFloor || getCell(newx - 1, newy) == tileCorridor) {
+					} else if (isFloor(newx - 1, newy) || isFloor(newx - 1, newy)) {
 						validTile = 1; //
 						xmod = +1;
 						ymod = 0;
 					}
 
-					else if (getCell(newx, newy - 1) == tileDirtFloor || getCell(newx, newy - 1) == tileCorridor) {
+					else if (isFloor(newx, newy - 1)|| isFloor(newx, newy - 1)) {
 						validTile = 2; //
 						xmod = 0;
 						ymod = +1;
 					}
 
-					else if (getCell(newx + 1, newy) == tileDirtFloor || getCell(newx + 1, newy) == tileCorridor) {
+					else if (isFloor(newx + 1, newy)) {
 						validTile = 3; //
 						xmod = -1;
 						ymod = 0;
@@ -160,13 +256,13 @@ public class dungeon {
 					// won't get alot of openings besides each other
 
 					if (validTile > -1) {
-						if (getCell(newx, newy + 1) == tileDoor) // north
+						if (isFloor(newx, newy + 1)) // north
 							validTile = -1;
-						else if (getCell(newx - 1, newy) == tileDoor) // east
+						else if (isFloor(newx - 1, newy)) // east
 							validTile = -1;
-						else if (getCell(newx, newy - 1) == tileDoor) // south
+						else if (isFloor(newx, newy - 1)) // south
 							validTile = -1;
-						else if (getCell(newx + 1, newy) == tileDoor) // west
+						else if (isFloor(newx + 1, newy)) // west
 							validTile = -1;
 					}
 
@@ -190,7 +286,7 @@ public class dungeon {
 						setCell(newx, newy, tileDoor);
 
 						// clean up infront of the door so we can reach it
-						setCell((newx + xmod), (newy + ymod), tileDirtFloor);
+						setCell((newx + xmod), (newy + ymod), MathUtils.random(FLOOR_1_1, FLOOR_1_10));
 					}
 				}
 
@@ -203,13 +299,14 @@ public class dungeon {
 				}
 			}
 		}
+	}
 
 		/*******************************************************************************
 		 * 
 		 * All done with the building, let's finish this one off
 		 * 
 		 *******************************************************************************/
-
+		/* -nate
 		// sprinkle out the bonusstuff (stairs, chests etc.) over the map
 		int newx = 0;
 		int newy = 0;
@@ -267,23 +364,17 @@ public class dungeon {
 						break;
 					}
 				}
+				
 			}
+		
 		}
+		
 
 		// all done with the map generation, tell the user about it and finish
 		System.out.println(msgNumObjects + currentFeatures);
 
 	}
-
-	// setting a tile's type
-	private void setCell(int x, int y, int celltype) {
-		dungeon_map[x + xsize * y] = celltype;
-	}
-
-	// returns the type of a tile
-	private int getCell(int x, int y) {
-		return dungeon_map[x + xsize * y];
-	}
+	*/
 
 	// The RNG. the seed is based on seconds from the "java epoch" ( I think..)
 	// perhaps it's the same date as the unix epoch
@@ -302,13 +393,13 @@ public class dungeon {
 		// System.out.println("seed: " + seed + "\tnum: " + (min + i));
 		return min + i;
 	}
-
-	private boolean makeCorridor(int x, int y, int lenght, int direction) {
+//Not use right now - nate
+	private boolean makeCorridor(int x, int y, int lenght, int direction) { 
 		/*******************************************************************************/
 		// define the dimensions of the corridor (er.. only the width and
 		// height..)
 		int len = getRand(2, lenght);
-		int floor = tileCorridor;
+		int floor = 71; //Blank title - nate
 		int dir = 0;
 		if (direction > 0 && direction < 4)
 			dir = direction;
@@ -331,14 +422,14 @@ public class dungeon {
 			for (ytemp = y; ytemp > (y - len); ytemp--) {
 				if (ytemp < 0 || ytemp > ysize)
 					return false; // oh boho, it was!
-				if (getCell(xtemp, ytemp) != tileUnused)
+				if (getCell(xtemp, ytemp) != VOID_1)
 					return false;
 			}
-			//Check if it ever hits wall or other Corridor.
+			// Check if it ever hits wall or other Corridor.
 			for (ytemp = y; ytemp > (y - len); ytemp--) {
 				if (ytemp < 0 || ytemp > ysize)
 					return false; // oh boho, it was!
-				if (getCell(xtemp, ytemp) != tileUnused)
+				if (getCell(xtemp, ytemp) != VOID_1)
 					return false;
 			}
 
@@ -354,7 +445,7 @@ public class dungeon {
 			for (xtemp = x; xtemp < (x + len); xtemp++) {
 				if (xtemp < 0 || xtemp > xsize)
 					return false;
-				if (getCell(xtemp, ytemp) != tileUnused)
+				if (getCell(xtemp, ytemp) != VOID_1)
 					return false;
 			}
 
@@ -369,7 +460,7 @@ public class dungeon {
 			for (ytemp = y; ytemp < (y + len); ytemp++) {
 				if (ytemp < 0 || ytemp > ysize)
 					return false;
-				if (getCell(xtemp, ytemp) != tileUnused)
+				if (getCell(xtemp, ytemp) != VOID_1)
 					return false;
 			}
 
@@ -384,7 +475,7 @@ public class dungeon {
 			for (xtemp = x; xtemp > (x - len); xtemp--) {
 				if (xtemp < 0 || xtemp > xsize)
 					return false;
-				if (getCell(xtemp, ytemp) != tileUnused)
+				if (getCell(xtemp, ytemp) != VOID_1)
 					return false;
 			}
 
@@ -400,15 +491,15 @@ public class dungeon {
 
 	private boolean makeRoom(int x, int y, int xlength, int ylength, int direction) {
 		/*******************************************************************************/
-		
+
 		// define the dimensions of the room, it should be at least 6x6 tiles
 		// (2x2 for walking on, the rest is walls)
 		int xlen = getRand(6, xlength);
 		int ylen = getRand(6, ylength);
 
 		// the tile type it's going to be filled with
-		int floor = tileDirtFloor;
-		int wall = tileDirtWall; 
+		//int floor = tileDirtFloor;
+		//int wall = tileDirtWall;
 
 		// choose the way it's pointing at
 		int dir = 0;
@@ -426,7 +517,7 @@ public class dungeon {
 				for (int xtemp = (x - xlen / 2); xtemp < (x + (xlen + 1) / 2); xtemp++) {
 					if (xtemp < 0 || xtemp > xsize)
 						return false;
-					if (getCell(xtemp, ytemp) != tileUnused)
+					if (getCell(xtemp, ytemp) != VOID_1)
 						return false; // no space left...
 				}
 			}
@@ -436,16 +527,16 @@ public class dungeon {
 				for (int xtemp = (x - xlen / 2); xtemp < (x + (xlen + 1) / 2); xtemp++) {
 					// start with the walls
 					if (xtemp == (x - xlen / 2))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 72);
 					else if (xtemp == (x + (xlen - 1) / 2))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 73);
 					else if (ytemp == y)
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 74);
 					else if (ytemp == (y - ylen + 1))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 75);
 					// and then fill with the floor
 					else
-						setCell(xtemp, ytemp, floor);
+						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));
 				}
 			}
 
@@ -459,7 +550,7 @@ public class dungeon {
 				for (int xtemp = x; xtemp < (x + xlen); xtemp++) {
 					if (xtemp < 0 || xtemp > xsize)
 						return false;
-					if (getCell(xtemp, ytemp) != tileUnused)
+					if (getCell(xtemp, ytemp) != VOID_1)
 						return false;
 				}
 			}
@@ -467,15 +558,15 @@ public class dungeon {
 			for (int ytemp = (y - ylen / 2); ytemp < (y + (ylen + 1) / 2); ytemp++) {
 				for (int xtemp = x; xtemp < (x + xlen); xtemp++) {
 					if (xtemp == x)
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 72);
 					else if (xtemp == (x + xlen - 1))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 73);
 					else if (ytemp == (y - ylen / 2))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 74);
 					else if (ytemp == (y + (ylen - 1) / 2))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 75);
 					else
-						setCell(xtemp, ytemp, floor);
+						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));
 				}
 			}
 
@@ -489,7 +580,7 @@ public class dungeon {
 				for (int xtemp = (x - xlen / 2); xtemp < (x + (xlen + 1) / 2); xtemp++) {
 					if (xtemp < 0 || xtemp > xsize)
 						return false;
-					if (getCell(xtemp, ytemp) != tileUnused)
+					if (getCell(xtemp, ytemp) != VOID_1)
 						return false;
 				}
 			}
@@ -497,15 +588,15 @@ public class dungeon {
 			for (int ytemp = y; ytemp < (y + ylen); ytemp++) {
 				for (int xtemp = (x - xlen / 2); xtemp < (x + (xlen + 1) / 2); xtemp++) {
 					if (xtemp == (x - xlen / 2))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 72);
 					else if (xtemp == (x + (xlen - 1) / 2))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 73);
 					else if (ytemp == y)
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 74);
 					else if (ytemp == (y + ylen - 1))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 75);
 					else
-						setCell(xtemp, ytemp, floor);
+						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));
 				}
 			}
 
@@ -519,7 +610,7 @@ public class dungeon {
 				for (int xtemp = x; xtemp > (x - xlen); xtemp--) {
 					if (xtemp < 0 || xtemp > xsize)
 						return false;
-					if (getCell(xtemp, ytemp) != tileUnused)
+					if (getCell(xtemp, ytemp) != VOID_1)
 						return false;
 				}
 			}
@@ -527,15 +618,15 @@ public class dungeon {
 			for (int ytemp = (y - ylen / 2); ytemp < (y + (ylen + 1) / 2); ytemp++) {
 				for (int xtemp = x; xtemp > (x - xlen); xtemp--) {
 					if (xtemp == x)
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 72);
 					else if (xtemp == (x - xlen + 1))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 73);
 					else if (ytemp == (y - ylen / 2))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 74);
 					else if (ytemp == (y + (ylen - 1) / 2))
-						setCell(xtemp, ytemp, wall);
+						setCell(xtemp, ytemp, 75);
 					else
-						setCell(xtemp, ytemp, floor);
+						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));
 				}
 			}
 
@@ -545,50 +636,4 @@ public class dungeon {
 		// yay, all done
 		return true;
 	}
-	
-	public int[] getDungeon(){
-		return dungeon_map;
-	}
-
-	String showDungeon() {
-		/*******************************************************************************/
-		// used to print the map on the screen
-		String dungeonMap = "";
-		for (int y = 0; y < ysize; y++) {
-			for (int x = 0; x < xsize; x++) {
-				switch (getCell(x, y)) {
-				case tileUnused:
-					dungeonMap += " ";
-					break;
-				case tileDirtWall:
-					dungeonMap += "+";
-					break;
-				case tileDirtFloor:
-					dungeonMap += ".";
-					break;
-				case tileStoneWall:
-					dungeonMap += "O";
-					break;
-				case tileCorridor:
-					dungeonMap += "#";
-					break;
-				case tileDoor:
-					dungeonMap += "D";
-					break;
-				case tileUpStairs:
-					dungeonMap += "<";
-					break;
-				case tileDownStairs:
-					dungeonMap += ">";
-					break;
-				case tileChest:
-					dungeonMap += "*";
-					break;
-				}
-			}
-			dungeonMap += "\n";
-		}
-		return dungeonMap;
-	}
-
 }
