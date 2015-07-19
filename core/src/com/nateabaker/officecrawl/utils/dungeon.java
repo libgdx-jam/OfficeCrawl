@@ -566,16 +566,36 @@ public class Dungeon {
 
 			for (int ytemp = (y - ylen / 2); ytemp < (y + (ylen + 1) / 2); ytemp++) {
 				for (int xtemp = x; xtemp < (x + xlen); xtemp++) {
-					if (xtemp == x)
-						setCell(xtemp, ytemp, 72);
-					else if (xtemp == (x + xlen - 1))
-						setCell(xtemp, ytemp, 73);
+					if (xtemp == x){
+						setCell(xtemp, ytemp, MathUtils.random(LEFT_WALL_1, LEFT_WALL_10));
+						if(ytemp == y - ylen / 2)
+							setCell(xtemp, ytemp,TOP_LEFT_INSIDE);
+						if(ylen % 2 == 0){
+							if(ytemp == y + (ylen / 2)-1)
+								setCell(xtemp, ytemp,BOTTOM_LEFT_INSIDE);
+						}else{
+							if(ytemp == y + (ylen / 2))
+								setCell(xtemp, ytemp,BOTTOM_LEFT_INSIDE);
+						}
+					}
+					else if (xtemp == (x + xlen - 1)){
+						setCell(xtemp, ytemp, MathUtils.random(RIGHT_WALL_1, RIGHT_WALL_10));
+							if(ytemp == y - ylen / 2)
+								setCell(xtemp, ytemp,TOP_RIGHT_INSIDE);
+							if(ylen % 2 == 0){
+								if(ytemp == y + (ylen / 2)-1)
+									setCell(xtemp, ytemp,BOTTOM_RIGHT_INSIDE);
+							}else{
+								if(ytemp == y + (ylen / 2))
+									setCell(xtemp, ytemp,BOTTOM_RIGHT_INSIDE);
+							}
+					}
 					else if (ytemp == (y - ylen / 2))
-						setCell(xtemp, ytemp, 74);
+						setCell(xtemp, ytemp, MathUtils.random(TOP_WALL_1, TOP_WALL_10));
 					else if (ytemp == (y + (ylen - 1) / 2))
-						setCell(xtemp, ytemp, 75);
+						setCell(xtemp, ytemp, MathUtils.random(BOTTOM_WALL_1, BOTTOM_WALL_10));
 					else
-						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));
+						setCell(xtemp, ytemp, MathUtils.random(FLOOR_2_1, FLOOR_2_10));
 				}
 			}
 
@@ -596,14 +616,24 @@ public class Dungeon {
 
 			for (int ytemp = y; ytemp < (y + ylen); ytemp++) {
 				for (int xtemp = (x - xlen / 2); xtemp < (x + (xlen + 1) / 2); xtemp++) {
-					if (xtemp == (x - xlen / 2))
-						setCell(xtemp, ytemp, 72);
-					else if (xtemp == (x + (xlen - 1) / 2))
-						setCell(xtemp, ytemp, 73);
+					if (xtemp == (x - xlen / 2)){
+						setCell(xtemp, ytemp, MathUtils.random(LEFT_WALL_1, LEFT_WALL_10));
+						if(ytemp == y)
+							setCell(xtemp, ytemp, TOP_LEFT_INSIDE);
+						if(ytemp == (y + (ylen-1)))
+							setCell(xtemp, ytemp, BOTTOM_LEFT_INSIDE);
+					}
+					else if (xtemp == (x + (xlen - 1) / 2)){
+						setCell(xtemp, ytemp, MathUtils.random(RIGHT_WALL_1, RIGHT_WALL_10));
+						if(ytemp == y)
+							setCell(xtemp, ytemp, TOP_RIGHT_INSIDE);
+						if(ytemp == (y + (ylen-1)))
+							setCell(xtemp, ytemp, BOTTOM_RIGHT_INSIDE);
+					}
 					else if (ytemp == y)
-						setCell(xtemp, ytemp, 74);
+						setCell(xtemp, ytemp, MathUtils.random(TOP_WALL_1, TOP_WALL_10));
 					else if (ytemp == (y + ylen - 1))
-						setCell(xtemp, ytemp, 75);
+						setCell(xtemp, ytemp, MathUtils.random(BOTTOM_WALL_1, BOTTOM_WALL_10));
 					else
 						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));
 				}
@@ -626,14 +656,34 @@ public class Dungeon {
 
 			for (int ytemp = (y - ylen / 2); ytemp < (y + (ylen + 1) / 2); ytemp++) {
 				for (int xtemp = x; xtemp > (x - xlen); xtemp--) {
-					if (xtemp == x)
-						setCell(xtemp, ytemp, 72);
-					else if (xtemp == (x - xlen + 1))
-						setCell(xtemp, ytemp, 73);
+					if (xtemp == x){
+						setCell(xtemp, ytemp, MathUtils.random(RIGHT_WALL_1, RIGHT_WALL_10));
+						if(ytemp == y - ylen / 2)
+							setCell(xtemp, ytemp,TOP_RIGHT_INSIDE);
+						if(ylen % 2 == 0){
+							if(ytemp == y + (ylen / 2)-1)
+								setCell(xtemp, ytemp,BOTTOM_RIGHT_INSIDE);
+						}else{
+							if(ytemp == y + (ylen / 2))
+								setCell(xtemp, ytemp,BOTTOM_RIGHT_INSIDE);
+						}
+					}
+					else if (xtemp == (x - xlen + 1)){
+						setCell(xtemp, ytemp, MathUtils.random(LEFT_WALL_1, LEFT_WALL_10));
+						if(ytemp == y - ylen / 2)
+							setCell(xtemp, ytemp,TOP_LEFT_INSIDE);
+						if(ylen % 2 == 0){
+							if(ytemp == y + (ylen / 2)-1)
+								setCell(xtemp, ytemp,BOTTOM_LEFT_INSIDE);
+						}else{
+							if(ytemp == y + (ylen / 2))
+								setCell(xtemp, ytemp,BOTTOM_LEFT_INSIDE);
+						}
+					}
 					else if (ytemp == (y - ylen / 2))
-						setCell(xtemp, ytemp, 74);
+						setCell(xtemp, ytemp, MathUtils.random(TOP_WALL_1, TOP_WALL_10));
 					else if (ytemp == (y + (ylen - 1) / 2))
-						setCell(xtemp, ytemp, 75);
+						setCell(xtemp, ytemp, MathUtils.random(BOTTOM_WALL_1, BOTTOM_WALL_10));
 					else
 						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));
 				}
