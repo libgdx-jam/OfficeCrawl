@@ -57,7 +57,7 @@ public class SaveMap {
 		dungeonFile += "	</objectgroup>\n";
 		
 		dungeonFile += "</map>";
-		Gdx.app.log("saveDungeon", "\n"+dungeonFile);
+		//Gdx.app.log("saveDungeon", "\n"+dungeonFile);
 
 
 		FileHandle file = Gdx.files.local("Maps/test.tmx");

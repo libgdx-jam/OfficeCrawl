@@ -2,6 +2,7 @@ package com.nateabaker.officecrawl.utils;
 
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 
 public class Dungeon {
@@ -28,8 +29,8 @@ public class Dungeon {
 	// a list over tile types we're using
 	final private int VOID_1 = 1;
 	final private int VOID_2 = 2;
-	final private int TOP_RIGHT_INSIDE = 3;
-	final private int TOP_LEFT_INSIDE = 4;
+	final private int TOP_LEFT_INSIDE = 3;
+	final private int TOP_RIGHT_INSIDE = 4;
 	final private int BOTTOM_LEFT_INSIDE = 5;
 	final private int BOTTOM_RIGHT_INSIDE = 6;
 	final private int TOP_RIGHT_OUTSIDE = 7;
@@ -90,7 +91,7 @@ public class Dungeon {
 	final private int FLOOR_1_7 = 57;
 	final private int FLOOR_1_8 = 58;
 	final private int FLOOR_1_9 = 59;
-	final private int FLOOR_1_10 = 50;
+	final private int FLOOR_1_10 = 60;
 
 	final private int FLOOR_2_1 = 61;
 	final private int FLOOR_2_2 = 62;
@@ -127,7 +128,13 @@ public class Dungeon {
 	}
 	
 	private boolean isFloor(int x, int y){
-		if(getCell(x, y) < 51 && getCell(x, y) > 70)
+		if(getCell(x, y) >= 51 && getCell(x, y) <= 70)
+			return true;
+		else
+			return false;
+	}
+	private boolean isWall(int x, int y){
+		if(getCell(x, y) > 2 && getCell(x, y) < 51)
 			return true;
 		else
 			return false;
@@ -156,19 +163,13 @@ public class Dungeon {
 		else
 			ysize = iny;
 
-		System.out.println(msgXSize + xsize);
-		System.out.println(msgYSize + ysize);
-		System.out.println(msgMaxObjects + objects);
+		//System.out.println(msgXSize + xsize);
+		//System.out.println(msgYSize + ysize);
+		//System.out.println(msgMaxObjects + objects);
 
 		// redefine the map var, so it's adjusted to our new map size
 		dungeon_map = new int[xsize * ysize];
 		
-		//fill level with void -nate
-		for (int y = 0; y < ysize; y++) {
-			for (int x = 0; x < xsize; x++) {
-				setCell(x, y, VOID_1);
-			}
-		}
 		
 		// start with making the "standard stuff" on the map
 		for (int y = 0; y < ysize; y++) {
@@ -185,7 +186,7 @@ public class Dungeon {
 
 				// and fill the rest with dirt
 				else
-					setCell(x, y, VOID_2);
+					setCell(x, y, VOID_1);
 			}
 		}
 
@@ -197,7 +198,7 @@ public class Dungeon {
 
 		// start with making a room in the middle, which we can start building
 		// upon
-			makeRoom(xsize / 2, ysize / 2, 8, 6, getRand(0, 3));
+			makeRoom(xsize / 2, ysize / 2, 8, 6, 0);
 
 		// keep count of the number of "objects" we've made
 			int currentFeatures = 1; // +1 for the first room we just made
@@ -225,22 +226,20 @@ public class Dungeon {
 					newx = getRand(1, xsize - 1);
 					newy = getRand(1, ysize - 1);
 					validTile = -1;
-				
-				 System.out.println("tempx: " + newx + "\ttempy: " + newy);
 
-				if (isFloor(newx, newy) ||isFloor(newx, newy)) {
+				if (isWall(newx, newy)) {
 					// check if we can reach the place
-					if (isFloor(newx, newy + 1) || isFloor(newx, newy + 1)) {
+					if (isFloor(newx, newy + 1)) {
 						validTile = 0; //
 						xmod = 0;
 						ymod = -1;
-					} else if (isFloor(newx - 1, newy) || isFloor(newx - 1, newy)) {
+					} else if (isFloor(newx - 1, newy)) {
 						validTile = 1; //
 						xmod = +1;
 						ymod = 0;
 					}
 
-					else if (isFloor(newx, newy - 1)|| isFloor(newx, newy - 1)) {
+					else if (isFloor(newx, newy - 1)) {
 						validTile = 2; //
 						xmod = 0;
 						ymod = +1;
@@ -256,13 +255,13 @@ public class Dungeon {
 					// won't get alot of openings besides each other
 
 					if (validTile > -1) {
-						if (isFloor(newx, newy + 1)) // north
+						if (getCell(newx, newy+1) == tileDoor) // north
 							validTile = -1;
-						else if (isFloor(newx - 1, newy)) // east
+						else if (getCell(newx, newy+1) == tileDoor) // east
 							validTile = -1;
-						else if (isFloor(newx, newy - 1)) // south
+						else if (getCell(newx, newy+1) == tileDoor) // south
 							validTile = -1;
-						else if (isFloor(newx + 1, newy)) // west
+						else if (getCell(newx, newy+1) == tileDoor) // west
 							validTile = -1;
 					}
 
@@ -526,14 +525,24 @@ public class Dungeon {
 			for (int ytemp = y; ytemp > (y - ylen); ytemp--) {
 				for (int xtemp = (x - xlen / 2); xtemp < (x + (xlen + 1) / 2); xtemp++) {
 					// start with the walls
-					if (xtemp == (x - xlen / 2))
-						setCell(xtemp, ytemp, 72);
-					else if (xtemp == (x + (xlen - 1) / 2))
-						setCell(xtemp, ytemp, 73);
+					if (xtemp == (x - xlen / 2)){
+						setCell(xtemp, ytemp, MathUtils.random(LEFT_WALL_1, LEFT_WALL_10));
+						if(ytemp == (y - (ylen-1)))
+							setCell(xtemp, ytemp,TOP_LEFT_INSIDE);
+						if(ytemp == y)
+							setCell(xtemp, ytemp,BOTTOM_LEFT_INSIDE);
+					}
+					else if (xtemp == (x + (xlen - 1) / 2)){
+						setCell(xtemp, ytemp, MathUtils.random(RIGHT_WALL_1, RIGHT_WALL_10));
+						if(ytemp == (y - (ylen-1)))
+							setCell(xtemp, ytemp,TOP_RIGHT_INSIDE);
+						if(ytemp == y)
+							setCell(xtemp, ytemp,BOTTOM_RIGHT_INSIDE);
+					}
 					else if (ytemp == y)
-						setCell(xtemp, ytemp, 74);
+						setCell(xtemp, ytemp, MathUtils.random(BOTTOM_WALL_1, BOTTOM_WALL_10));
 					else if (ytemp == (y - ylen + 1))
-						setCell(xtemp, ytemp, 75);
+						setCell(xtemp, ytemp, MathUtils.random(TOP_WALL_1, TOP_WALL_10));
 					// and then fill with the floor
 					else
 						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));

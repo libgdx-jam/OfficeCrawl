@@ -41,7 +41,9 @@ public class GameScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
+        camera.translate(50,50);
         camera.update();
+        
 
         
         SaveMap.makeDungeon("Office01.png");
