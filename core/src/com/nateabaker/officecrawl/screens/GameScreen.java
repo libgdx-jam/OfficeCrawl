@@ -44,7 +44,7 @@ public class GameScreen implements Screen {
         camera.update();
 
         
-        SaveMap.makeDungeon();
+        SaveMap.makeDungeon("Office01.png");
         tiledMap = new TmxMapLoader().load("Maps/test.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 0.03125f);
         

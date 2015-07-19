@@ -7,19 +7,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-
+//Don't touch this!!!!
+//Don't touch this!!!!
+//Don't touch this!!!!
+//Don't touch this!!!!
 public class SaveMap {
+	private static String titleSheet = "Office01.png";
 	private static String header = ""
 			+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			+"	<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"right-down\" width=\"100\" height=\"100\" tilewidth=\"32\" tileheight=\"32\" nextobjectid=\"22\">\n"
 			+"		<tileset firstgid=\"1\" name=\"Office01\" tilewidth=\"32\" tileheight=\"32\">\n"
-	  		+"			<image source= \"TitleSheet/Office01.png\" trans=\"00ff7f\" width=\"320\" height=\"960\"/>\n"
+	  		+"			<image source=\"TitleSheet/"+titleSheet+"\" trans=\"00ff7f\" width=\"320\" height=\"960\"/>\n"
 			+"		 </tileset>\n"
 			+ "	<layer name=\"Tile Layer 1\" width=\"100\" height=\"100\">\n"
 			+ "		<data encoding=\"csv\">\n";
 
  	
-  	public static void makeDungeon(){
+  	public static void makeDungeon(String titleSheet){
+  		SaveMap.titleSheet = titleSheet;
 		Dungeon dungeon = new Dungeon();
 		dungeon.createDungeon(100, 100, MathUtils.random(150, 200));
 		saveDungeon(dungeon.getDungeon());
@@ -55,7 +60,7 @@ public class SaveMap {
 		Gdx.app.log("saveDungeon", "\n"+dungeonFile);
 
 
-		FileHandle file = Gdx.files.local("assets/Maps/test.tmx");
+		FileHandle file = Gdx.files.local("Maps/test.tmx");
 		file.writeString(dungeonFile, false);
 	}
 }
