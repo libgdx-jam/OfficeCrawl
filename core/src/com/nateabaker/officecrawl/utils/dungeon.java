@@ -104,7 +104,29 @@ public class Dungeon {
 	final private int FLOOR_2_9 = 69;
 	final private int FLOOR_2_10 = 70;
 	
-	final private int tileDoor = 79;
+	final private int FLOOR_3_1 = 71;
+	final private int FLOOR_3_2 = 72;
+	final private int FLOOR_3_3 = 73;
+	final private int FLOOR_3_4 = 74;
+	final private int FLOOR_3_5 = 75;
+	final private int FLOOR_3_6 = 76;
+	final private int FLOOR_3_7 = 77;
+	final private int FLOOR_3_8 = 78;
+	final private int FLOOR_3_9 = 79;
+	final private int FLOOR_3_10 = 80;
+	
+	final private int FLOOR_4_1 = 61;
+	final private int FLOOR_4_2 = 62;
+	final private int FLOOR_4_3 = 63;
+	final private int FLOOR_4_4 = 64;
+	final private int FLOOR_4_5 = 65;
+	final private int FLOOR_4_6 = 66;
+	final private int FLOOR_4_7 = 67;
+	final private int FLOOR_4_8 = 68;
+	final private int FLOOR_4_9 = 69;
+	final private int FLOOR_4_10 = 70;
+	
+	final private int tileDoor = 100;
 	
 	// misc. messages to print
 	private String msgXSize = "X size of dungeon: \t";
@@ -116,6 +138,8 @@ public class Dungeon {
 
 	private int roomList[][];
 	private int currentRoom = 0;
+	
+	private int currentDirection = 0;
 	
 	// setting a tile's type
 	private void setCell(int x, int y, int celltype) {
@@ -198,7 +222,7 @@ public class Dungeon {
 
 		// start with making a room in the middle, which we can start building
 		// upon
-			makeRoom(xsize / 2, ysize / 2, 8, 6, 0);
+			makeRoom(xsize / 2, ysize / 2, 8, 6, MathUtils.random(0,3));
 
 		// keep count of the number of "objects" we've made
 			int currentFeatures = 1; // +1 for the first room we just made
@@ -281,11 +305,45 @@ public class Dungeon {
 					if (makeRoom((newx + xmod), (newy + ymod), MathUtils.random(6, 15), MathUtils.random(6, 15), validTile)) {
 						currentFeatures++; // add to our quota
 
-						// then we mark the wall opening with a door
-						setCell(newx, newy, tileDoor);
+						switch(validTile){
+						case 0:
+							 setCell(newx, newy, tileDoor);
+							 setCell(newx, newy-1, tileDoor);
+							 if(getCell(newx+1, newy) == TOP_RIGHT_INSIDE)
+								 setCell(newx+1, newy, MathUtils.random(RIGHT_WALL_1, RIGHT_WALL_10));
+							 else
+								 setCell(newx+1, newy, BOTTOM_LEFT_OUTSIDE);
+							 
+							 if(getCell(newx-1, newy) == TOP_RIGHT_INSIDE)
+								 setCell(newx-1, newy, MathUtils.random(LEFT_WALL_1, LEFT_WALL_10));
+							 else
+								 setCell(newx-1, newy, BOTTOM_RIGHT_OUTSIDE);
+							//OTHER SIDE
+							 if(getCell(newx+1, newy-1) == BOTTOM_RIGHT_INSIDE)
+								 setCell(newx+1, newy-1, MathUtils.random(RIGHT_WALL_1, RIGHT_WALL_10));
+							 else
+								 setCell(newx+1, newy-1, TOP_RIGHT_OUTSIDE);
+							 
+							 if(getCell(newx-1, newy-1) == BOTTOM_RIGHT_INSIDE)
+								 setCell(newx-1, newy-1, MathUtils.random(LEFT_WALL_1, LEFT_WALL_10));
+							 else
+								 setCell(newx-1, newy-1, TOP_LEFT_OUTSIDE);
+							break;
+						case 1:
+							 setCell(newx, newy, tileDoor);
+							 setCell(newx+1, newy, tileDoor);
+							break;							
+						case 2:
+							 setCell(newx, newy, tileDoor);
+							 setCell(newx, newy+1, tileDoor);
+							break;
+						case 3:
+							 setCell(newx, newy, tileDoor);
+							 setCell(newx-1, newy, tileDoor);
+							break;
+						}
 
-						// clean up infront of the door so we can reach it
-						setCell((newx + xmod), (newy + ymod), MathUtils.random(FLOOR_1_1, FLOOR_1_10));
+
 					}
 				}
 
@@ -635,7 +693,7 @@ public class Dungeon {
 					else if (ytemp == (y + ylen - 1))
 						setCell(xtemp, ytemp, MathUtils.random(BOTTOM_WALL_1, BOTTOM_WALL_10));
 					else
-						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));
+						setCell(xtemp, ytemp, MathUtils.random(FLOOR_3_1, FLOOR_3_10));
 				}
 			}
 
@@ -681,11 +739,11 @@ public class Dungeon {
 						}
 					}
 					else if (ytemp == (y - ylen / 2))
-						setCell(xtemp, ytemp, MathUtils.random(TOP_WALL_1, TOP_WALL_10));
+						setCell(xtemp, ytemp, MathUtils.random(TOP_WALL_1, TOP_WALL_10)); 
 					else if (ytemp == (y + (ylen - 1) / 2))
 						setCell(xtemp, ytemp, MathUtils.random(BOTTOM_WALL_1, BOTTOM_WALL_10));
 					else
-						setCell(xtemp, ytemp, MathUtils.random(FLOOR_1_1, FLOOR_1_10));
+						setCell(xtemp, ytemp, MathUtils.random(FLOOR_4_1, FLOOR_4_10));
 				}
 			}
 

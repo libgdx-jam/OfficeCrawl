@@ -17,7 +17,7 @@ public class SaveMap {
 			+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			+"	<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"right-down\" width=\"100\" height=\"100\" tilewidth=\"32\" tileheight=\"32\" nextobjectid=\"22\">\n"
 			+"		<tileset firstgid=\"1\" name=\"Office01\" tilewidth=\"32\" tileheight=\"32\">\n"
-	  		+"			<image source=\"TitleSheet/"+titleSheet+"\" trans=\"00ff7f\" width=\"320\" height=\"960\"/>\n"
+	  		+"			<image source=\"TitleSheet/"+titleSheet+"\" trans=\"00ff7f\" width=\"320\" height=\"320\"/>\n"
 			+"		 </tileset>\n"
 			+ "	<layer name=\"Tile Layer 1\" width=\"100\" height=\"100\">\n"
 			+ "		<data encoding=\"csv\">\n";
