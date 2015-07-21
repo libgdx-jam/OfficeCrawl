@@ -215,7 +215,7 @@ public class Dungeon {
 			}
 		}
 
-		makeRoom(xsize / 2, ysize / 2, 8, 6, MathUtils.random(0, 3));
+		makeRoom(xsize / 2, ysize / 2, 8, 6, 0);
 
 		int currentFeatures = 1;
 
@@ -253,7 +253,7 @@ public class Dungeon {
 						xmod = -1;
 						ymod = 0;
 					}
-					System.out.println(""+validTile);
+					System.out.println("A: "+validTile);
 					if (validTile > -1) {
 						if (getCell(newx, newy+1) == DOOR) //north
 							validTile = -1;
@@ -264,7 +264,7 @@ public class Dungeon {
 						else if (getCell(newx+1, newy) == DOOR)//west
 							validTile = -1;
 					}
-					
+					System.out.println("B: "+validTile);
 					if (validTile > -1)
 						break;
 				}
@@ -326,8 +326,29 @@ public class Dungeon {
 					case 2:
 						setCell(newx, newy, DOOR);
 						break;
-					case 3:
-						setCell(newx, newy, DOOR);
+					case 3://west
+						setCell(newx, newy,DOOR);
+						setCell(newx-1, newy,DOOR);
+						if (getCell(newx, newy + 1) == BOTTOM_LEFT_INSIDE)
+							setCell(newx, newy + 1, MathUtils.random(BOTTOM_WALL_1, BOTTOM_WALL_10));
+						else
+							setCell(newx, newy + 1, TOP_LEFT_OUTSIDE);
+						
+						if (getCell(newx, newy - 1) == TOP_LEFT_INSIDE)
+							setCell(newx, newy - 1, MathUtils.random(TOP_WALL_1, TOP_WALL_10));
+						else
+							setCell(newx, newy - 1, BOTTOM_RIGHT_OUTSIDE);
+						//Other side
+						if (getCell(newx - 1, newy + 1) == TOP_RIGHT_INSIDE)
+							setCell(newx - 1, newy + 1, MathUtils.random(TOP_WALL_1, TOP_WALL_10));
+						else
+							setCell(newx - 1, newy + 1, TOP_RIGHT_OUTSIDE);
+						
+						if (getCell(newx - 1, newy - 1) == BOTTOM_RIGHT_INSIDE)
+							setCell(newx - 1, newy - 1, MathUtils.random(BOTTOM_WALL_1, BOTTOM_WALL_10));
+						else
+							setCell(newx - 1, newy - 1, BOTTOM_LEFT_OUTSIDE);
+
 						break;
 					}
 				}
@@ -352,7 +373,7 @@ public class Dungeon {
 					if (xtemp < 0 || xtemp > xsize)
 						return false;
 					if (getCell(xtemp, ytemp) != VOID_1)
-						return false; // no space left...
+						return false;
 				}
 			}
 
