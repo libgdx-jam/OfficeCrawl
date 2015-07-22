@@ -325,6 +325,26 @@ public class Dungeon {
 						break;
 					case 2:
 						setCell(newx, newy, DOOR);
+						setCell(newx, newy + 1, DOOR);
+						if (getCell(newx + 1, newy) == BOTTOM_RIGHT_INSIDE)//RIGHT
+							setCell(newx + 1, newy, MathUtils.random(RIGHT_WALL_1, RIGHT_WALL_10));
+						else
+							setCell(newx + 1, newy, TOP_RIGHT_OUTSIDE);
+
+						if (getCell(newx - 1, newy) == BOTTOM_LEFT_INSIDE)//LEFT
+							setCell(newx - 1, newy, MathUtils.random(LEFT_WALL_1, LEFT_WALL_10));
+						else
+							setCell(newx - 1, newy, TOP_LEFT_OUTSIDE);
+						//Other side  
+						if (getCell(newx - 1, newy+1) == TOP_RIGHT_INSIDE)//RIGHT
+							setCell(newx - 1, newy+1, MathUtils.random(RIGHT_WALL_1, RIGHT_WALL_10));
+						else
+							setCell(newx - 1, newy+1,BOTTOM_RIGHT_OUTSIDE );
+						
+						if (getCell(newx + 1, newy+1) == TOP_LEFT_INSIDE)//LEFT
+							setCell(newx + 1, newy+1, MathUtils.random(LEFT_WALL_1, LEFT_WALL_10));
+						else
+							setCell(newx + 1, newy+1, BOTTOM_LEFT_OUTSIDE);
 						break;
 					case 3://west
 						setCell(newx, newy,DOOR);
