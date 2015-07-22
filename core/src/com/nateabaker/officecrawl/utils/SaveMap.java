@@ -25,7 +25,7 @@ public class SaveMap {
  	
   	public static void makeDungeon(String titleSheet){
   		SaveMap.titleSheet = titleSheet;
-		Dungeon dungeon = new Dungeon();
+  		DungeonGenerator dungeon = new DungeonGenerator();
 		dungeon.createDungeon(100, 100, MathUtils.random(150, 200));
 		saveDungeon(dungeon.getDungeon());
 	}
