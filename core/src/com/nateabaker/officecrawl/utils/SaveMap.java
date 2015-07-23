@@ -25,19 +25,19 @@ public class SaveMap {
  	
   	public static void makeDungeon(String titleSheet){
   		SaveMap.titleSheet = titleSheet;
-  		DungeonGenerator dungeon = new DungeonGenerator();
-		dungeon.createDungeon(100, 100, MathUtils.random(150, 200));
-		saveDungeon(dungeon.getDungeon());
+  		Dungeon dungeon = new Dungeon(100, 100, MathUtils.random(150, 200));
+  		DungeonGenerator.createDungeon(dungeon);
+  		saveDungeon(dungeon);
 	}
 
-	private static void saveDungeon(int[] dungeonMap){
+	private static void saveDungeon(Dungeon dungeon){
 		String dungeonFile = "";
 		dungeonFile += header;
-		for(int i = 0; i < dungeonMap.length; i++){
+		for(int i = 0; i < dungeon.getTileLayer().length; i++){
 			if(i == 0) dungeonFile += "			";
 			if(i % 100 == 0 && i != 0){dungeonFile += "\n 			";}
-			dungeonFile += dungeonMap[i]; 
-			if(i != dungeonMap.length-1)dungeonFile += ",";
+			dungeonFile += dungeon.getTileLayer()[i]; 
+			if(i != dungeon.getTileLayer().length-1)dungeonFile += ",";
 		}
 		dungeonFile += "\n		</data>\n"
 					 + "	</layer>\n";
@@ -45,8 +45,8 @@ public class SaveMap {
 		dungeonFile += "	<objectgroup name=\"Object Layer 1\">\n";
 		int x = 0;
 		int y = 0;
-		for(int i = 1; i < dungeonMap.length; i++){
-			if(dungeonMap[i] == 1 || dungeonMap[i] == 2 || dungeonMap[i] == 4){
+		for(int i = 1; i < dungeon.getTileLayer().length; i++){
+			if(dungeon.getTileLayer()[i] == 1 || dungeon.getTileLayer()[i] == 2 || dungeon.getTileLayer()[i] == 4){
 				x = i%100;
 				if(x == 0){y++;}
 				
