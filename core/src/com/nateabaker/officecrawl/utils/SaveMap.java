@@ -19,7 +19,7 @@ public class SaveMap {
 			+"		<tileset firstgid=\"1\" name=\"Office01\" tilewidth=\"32\" tileheight=\"32\">\n"
 	  		+"			<image source=\"TitleSheet/"+titleSheet+"\" trans=\"00ff7f\" width=\"320\" height=\"320\"/>\n"
 			+"		 </tileset>\n"
-			+ "	<layer name=\"Tile Layer 1\" width=\"100\" height=\"100\">\n"
+			+ "	<layer name=\"tileLayer\" width=\"100\" height=\"100\">\n"
 			+ "		<data encoding=\"csv\">\n";
 
  	
@@ -42,14 +42,13 @@ public class SaveMap {
 		dungeonFile += "\n		</data>\n"
 					 + "	</layer>\n";
 		int objectID = 0;
-		dungeonFile += "	<objectgroup name=\"Object Layer 1\">\n";
+		dungeonFile += "	<objectgroup name=\"collisionLayer\">\n";
 		int x = 0;
 		int y = 0;
 		for(int i = 1; i < dungeon.getCollisionLayer().length; i++){
 			x = i%100;
 			if(x == 0){y++;}
 			if(dungeon.getCollisionLayer()[i] == true){
-				System.out.println(x);
 				dungeonFile += "		<object id=\""+objectID+"\" name=\"CollsionBox\" type=\"Corridor\" x=\""+x*32+"\" y=\""+y*32+"\" width=\"32\" height=\"32\"/>\n";
 				objectID ++;
 			}
