@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nateabaker.officecrawl.utils.SaveMap;
 
@@ -49,7 +51,7 @@ public class GameScreen implements Screen {
         SaveMap.makeDungeon("Office01.png");
         tiledMap = new TmxMapLoader().load("Maps/test.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 0.03125f);
-        
+     
         world = new World(new Vector2(0, 0), true);
 		
         BodyDef def = new BodyDef();

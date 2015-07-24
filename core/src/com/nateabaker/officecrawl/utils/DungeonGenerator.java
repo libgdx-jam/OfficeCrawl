@@ -30,6 +30,11 @@ public class DungeonGenerator {
 					dungeon.setTile(x, y, t.VOID_1);
 			}
 		}
+		for (int y = 0; y < dungeon.getySize(); y++) {
+			for (int x = 0; x < dungeon.getxSize(); x++) {
+				dungeon.setCollision(x, y, false);
+			}
+		}
 
 		DungeonGenerator.makeRoom(dungeon.getxSize() / 2, dungeon.getySize() / 2, 8, 6, 0);
 
@@ -69,7 +74,6 @@ public class DungeonGenerator {
 						xmod = -1;
 						ymod = 0;
 					}
-					System.out.println("A: "+validTile);
 					if (validTile > -1) {
 						if (dungeon.getTile(newx, newy+1) == t.DOOR) //north
 							validTile = -1;
@@ -80,7 +84,6 @@ public class DungeonGenerator {
 						else if (dungeon.getTile(newx+1, newy) == t.DOOR)//west
 							validTile = -1;
 					}
-					System.out.println("B: "+validTile);
 					if (validTile > -1)
 						break;
 				}
@@ -94,7 +97,9 @@ public class DungeonGenerator {
 					switch (validTile) {
 					case 0://north
 						dungeon.setTile(newx, newy, t.DOOR);
+						dungeon.setCollision(newx, newy, false);
 						dungeon.setTile(newx, newy - 1, t.DOOR);
+						dungeon.setCollision(newx, newy - 1, false);
 						if (dungeon.getTile(newx - 1, newy) == t.TOP_LEFT_INSIDE)
 							dungeon.setTile(newx - 1, newy, t.getLeftWall());
 						else
@@ -117,7 +122,9 @@ public class DungeonGenerator {
 						break;
 					case 1://east
 						dungeon.setTile(newx, newy,t.DOOR);
-						dungeon.setTile(newx+1, newy,t.DOOR);
+						dungeon.setCollision(newx, newy, false);
+						dungeon.setTile(newx + 1, newy,t.DOOR);
+						dungeon.setCollision(newx+1, newy, false);
 						if (dungeon.getTile(newx, newy - 1) == t.TOP_RIGHT_INSIDE)
 							dungeon.setTile(newx, newy - 1, t.getTopWall());
 						else
@@ -141,7 +148,9 @@ public class DungeonGenerator {
 						break;
 					case 2:
 						dungeon.setTile(newx, newy, t.DOOR);
+						dungeon.setCollision(newx, newy, false);
 						dungeon.setTile(newx, newy + 1, t.DOOR);
+						dungeon.setCollision(newx, newy + 1, false);
 						if (dungeon.getTile(newx + 1, newy) == t.BOTTOM_RIGHT_INSIDE)//RIGHT
 							dungeon.setTile(newx + 1, newy, t.getRightWall());
 						else
@@ -164,7 +173,9 @@ public class DungeonGenerator {
 						break;
 					case 3://west
 						dungeon.setTile(newx, newy,t.DOOR);
+						dungeon.setCollision(newx, newy, false);
 						dungeon.setTile(newx-1, newy,t.DOOR);
+						dungeon.setCollision(newx - 1, newy, false);
 						if (dungeon.getTile(newx, newy + 1) == t.BOTTOM_LEFT_INSIDE)
 							dungeon.setTile(newx, newy + 1, t.getBottomWall());
 						else
@@ -216,26 +227,31 @@ public class DungeonGenerator {
 			for (int ytemp = y; ytemp > (y - ylen); ytemp--) {
 				for (int xtemp = (x - xlen / 2); xtemp < (x + (xlen + 1) / 2); xtemp++) {
 					if (xtemp == (x - xlen / 2)) {
-						dungeon.setTile(xtemp, ytemp, MathUtils.random(t.LEFT_WALL_1, t.LEFT_WALL_10));
+						dungeon.setTile(xtemp, ytemp, t.getLeftWall());
+						dungeon.setCollision(xtemp, ytemp, true);
 						if (ytemp == (y - (ylen - 1)))
 							dungeon.setTile(xtemp, ytemp, t.TOP_LEFT_INSIDE);
 						if (ytemp == y)
 							dungeon.setTile(xtemp, ytemp, t.BOTTOM_LEFT_INSIDE);
 					} else if (xtemp == (x + (xlen - 1) / 2)) {
 						dungeon.setTile(xtemp, ytemp, t.getRightWall());
+						dungeon.setCollision(xtemp, ytemp, true);
 						if (ytemp == (y - (ylen - 1)))
 							dungeon.setTile(xtemp, ytemp, t.TOP_RIGHT_INSIDE);
 						if (ytemp == y)
 							dungeon.setTile(xtemp, ytemp, t.BOTTOM_RIGHT_INSIDE);
-					} else if (ytemp == y)
+					} else if (ytemp == y){
 						dungeon.setTile(xtemp, ytemp, t.getBottomWall());
-					else if (ytemp == (y - ylen + 1))
+						dungeon.setCollision(xtemp, ytemp, true);
+					}
+					else if (ytemp == (y - ylen + 1)){
 						dungeon.setTile(xtemp, ytemp, t.getTopWall());
+						dungeon.setCollision(xtemp, ytemp, true);	
+					}
 					else
 						dungeon.setTile(xtemp, ytemp, t.getFloor1Wall());
 				}
 			}
-
 			break;
 
 		case 1: // east
@@ -254,6 +270,7 @@ public class DungeonGenerator {
 				for (int xtemp = x; xtemp < (x + xlen); xtemp++) {
 					if (xtemp == x) {
 						dungeon.setTile(xtemp, ytemp, t.getLeftWall());
+						dungeon.setCollision(xtemp, ytemp, true);
 						if (ytemp == y - ylen / 2)
 							dungeon.setTile(xtemp, ytemp, t.TOP_LEFT_INSIDE);
 						if (ylen % 2 == 0) {
@@ -265,6 +282,7 @@ public class DungeonGenerator {
 						}
 					} else if (xtemp == (x + xlen - 1)) {
 						dungeon.setTile(xtemp, ytemp, t.getRightWall());
+						dungeon.setCollision(xtemp, ytemp, true);
 						if (ytemp == y - ylen / 2)
 							dungeon.setTile(xtemp, ytemp, t.TOP_RIGHT_INSIDE);
 						if (ylen % 2 == 0) {
@@ -274,10 +292,14 @@ public class DungeonGenerator {
 							if (ytemp == y + (ylen / 2))
 								dungeon.setTile(xtemp, ytemp, t.BOTTOM_RIGHT_INSIDE);
 						}
-					} else if (ytemp == (y - ylen / 2))
+					} else if (ytemp == (y - ylen / 2)){
 						dungeon.setTile(xtemp, ytemp, t.getTopWall());
-					else if (ytemp == (y + (ylen - 1) / 2))
+						dungeon.setCollision(xtemp, ytemp, true);
+					}
+					else if (ytemp == (y + (ylen - 1) / 2)){
 						dungeon.setTile(xtemp, ytemp, t.getBottomWall());
+						dungeon.setCollision(xtemp, ytemp, true);
+					}
 					else
 						dungeon.setTile(xtemp, ytemp, t.getFloor2Wall());
 				}
@@ -302,20 +324,26 @@ public class DungeonGenerator {
 				for (int xtemp = (x - xlen / 2); xtemp < (x + (xlen + 1) / 2); xtemp++) {
 					if (xtemp == (x - xlen / 2)) {
 						dungeon.setTile(xtemp, ytemp, t.getLeftWall());
+						dungeon.setCollision(xtemp, ytemp, true);
 						if (ytemp == y)
 							dungeon.setTile(xtemp, ytemp, t.TOP_LEFT_INSIDE);
 						if (ytemp == (y + (ylen - 1)))
 							dungeon.setTile(xtemp, ytemp, t.BOTTOM_LEFT_INSIDE);
 					} else if (xtemp == (x + (xlen - 1) / 2)) {
 						dungeon.setTile(xtemp, ytemp, t.getRightWall());
+						dungeon.setCollision(xtemp, ytemp, true);
 						if (ytemp == y)
 							dungeon.setTile(xtemp, ytemp, t.TOP_RIGHT_INSIDE);
 						if (ytemp == (y + (ylen - 1)))
 							dungeon.setTile(xtemp, ytemp, t.BOTTOM_RIGHT_INSIDE);
-					} else if (ytemp == y)
+					} else if (ytemp == y){
 						dungeon.setTile(xtemp, ytemp, t.getTopWall());
-					else if (ytemp == (y + ylen - 1))
+						dungeon.setCollision(xtemp, ytemp, true);
+					}
+					else if (ytemp == (y + ylen - 1)){
 						dungeon.setTile(xtemp, ytemp, t.getBottomWall());
+						dungeon.setCollision(xtemp, ytemp, true);
+					}
 					else
 						dungeon.setTile(xtemp, ytemp, t.getFloor3Wall());
 				}
@@ -340,6 +368,7 @@ public class DungeonGenerator {
 				for (int xtemp = x; xtemp > (x - xlen); xtemp--) {
 					if (xtemp == x) {
 						dungeon.setTile(xtemp, ytemp, t.getRightWall());
+						dungeon.setCollision(xtemp, ytemp, true);
 						if (ytemp == y - ylen / 2)
 							dungeon.setTile(xtemp, ytemp, t.TOP_RIGHT_INSIDE);
 						if (ylen % 2 == 0) {
@@ -351,6 +380,7 @@ public class DungeonGenerator {
 						}
 					} else if (xtemp == (x - xlen + 1)) {
 						dungeon.setTile(xtemp, ytemp, t.getLeftWall());
+						dungeon.setCollision(xtemp, ytemp, true);
 						if (ytemp == y - ylen / 2)
 							dungeon.setTile(xtemp, ytemp, t.TOP_LEFT_INSIDE);
 						if (ylen % 2 == 0) {
@@ -360,10 +390,14 @@ public class DungeonGenerator {
 							if (ytemp == y + (ylen / 2))
 								dungeon.setTile(xtemp, ytemp, t.BOTTOM_LEFT_INSIDE);
 						}
-					} else if (ytemp == (y - ylen / 2))
+					} else if (ytemp == (y - ylen / 2)){
 						dungeon.setTile(xtemp, ytemp, t.getTopWall());
-					else if (ytemp == (y + (ylen - 1) / 2))
+						dungeon.setCollision(xtemp, ytemp, true);
+					}
+					else if (ytemp == (y + (ylen - 1) / 2)){
 						dungeon.setTile(xtemp, ytemp, t.getBottomWall());
+						dungeon.setCollision(xtemp, ytemp, true);
+					}
 					else
 						dungeon.setTile(xtemp, ytemp, t.getFloor4Wall());
 				}

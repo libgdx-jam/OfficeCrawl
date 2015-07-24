@@ -45,11 +45,11 @@ public class SaveMap {
 		dungeonFile += "	<objectgroup name=\"Object Layer 1\">\n";
 		int x = 0;
 		int y = 0;
-		for(int i = 1; i < dungeon.getTileLayer().length; i++){
-			if(dungeon.getTileLayer()[i] == 1 || dungeon.getTileLayer()[i] == 2 || dungeon.getTileLayer()[i] == 4){
-				x = i%100;
-				if(x == 0){y++;}
-				
+		for(int i = 1; i < dungeon.getCollisionLayer().length; i++){
+			x = i%100;
+			if(x == 0){y++;}
+			if(dungeon.getCollisionLayer()[i] == true){
+				System.out.println(x);
 				dungeonFile += "		<object id=\""+objectID+"\" name=\"CollsionBox\" type=\"Corridor\" x=\""+x*32+"\" y=\""+y*32+"\" width=\"32\" height=\"32\"/>\n";
 				objectID ++;
 			}
