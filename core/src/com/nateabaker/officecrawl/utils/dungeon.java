@@ -4,12 +4,16 @@ public class Dungeon {
 	private int[] tileLayer;
 	private boolean[] collisionLayer;
 	private int[] entityLayer;
+	private int xSize;
+	private int ySize;
+	private int objects;
 	
-	int xSize;
-	int ySize;
-	int objects;
+	private String  tileSheet;
+	private TileSet t = new TileSet();
 	
-	public Dungeon(int xSize, int ySize, int objects){
+	public Dungeon(int xSize, int ySize, int objects, String tileSheet){
+		this.tileSheet =  tileSheet;
+		
 		if (objects < 1)
 			this.objects = 10;
 		else
@@ -39,14 +43,14 @@ public class Dungeon {
 	}
 
 	public boolean isFloor(int x, int y) {
-		if (getTile(x, y) >= 51 && getTile(x, y) <= 70)
+		if (getTile(x, y) >= t.FLOOR_1_1 && getTile(x, y) <= t.FLOOR_5_10)
 			return true;
 		else
 			return false;
 	}
 
 	public boolean isWall(int x, int y) {
-		if (getTile(x, y) > 2 && getTile(x, y) < 51)
+		if (getTile(x, y) > t.TOP_LEFT_INSIDE && getTile(x, y) < t.BOTTOM_WALL_10)
 			return true;
 		else
 			return false;
@@ -73,6 +77,12 @@ public class Dungeon {
 	}
 	public int[] getEntityLayer() {
 		return entityLayer;
+	}
+	public String getTitleSheet() {
+		return tileSheet;
+	}
+	public TileSet getTitleSet(){
+		return t;
 	}
 
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -21,6 +22,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.nateabaker.officecrawl.utils.Dungeon;
+import com.nateabaker.officecrawl.utils.DungeonGenerator;
 import com.nateabaker.officecrawl.utils.SaveMap;
 
 public class GameScreen implements Screen {
@@ -33,6 +36,7 @@ public class GameScreen implements Screen {
     
     private World world;
     private Body body;
+
     
     private Box2DDebugRenderer renderer;
 
@@ -48,7 +52,10 @@ public class GameScreen implements Screen {
         
 
         
-        SaveMap.makeDungeon("Office01.png");
+        Dungeon dungeon = new Dungeon(100, 100, MathUtils.random(150, 200), "Office01.png");
+        DungeonGenerator.createDungeon(dungeon);
+        SaveMap.saveDungeon(dungeon,"test.tmx");
+        
         tiledMap = new TmxMapLoader().load("Maps/test.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 0.03125f);
      

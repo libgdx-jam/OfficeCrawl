@@ -51,7 +51,7 @@ public class TileSet {
 	final public int BOTTOM_WALL_1 = 41;
 	final public int BOTTOM_WALL_2 = 42;
 	final public int BOTTOM_WALL_3 = 43;
-	final public int BOTTOM_WALL_4 = 54;
+	final public int BOTTOM_WALL_4 = 44;
 	final public int BOTTOM_WALL_5 = 45;
 	final public int BOTTOM_WALL_6 = 46;
 	final public int BOTTOM_WALL_7 = 47;
