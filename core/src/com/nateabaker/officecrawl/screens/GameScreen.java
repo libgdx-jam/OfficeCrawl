@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nateabaker.officecrawl.utils.Dungeon;
 import com.nateabaker.officecrawl.utils.DungeonGenerator;
+import com.nateabaker.officecrawl.utils.MapBodyBuilder;
 import com.nateabaker.officecrawl.utils.SaveMap;
 
 public class GameScreen implements Screen {
@@ -60,16 +62,18 @@ public class GameScreen implements Screen {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 0.03125f);
      
         world = new World(new Vector2(0, 0), true);
+        
+        Array<Body> bodies = MapBodyBuilder.buildShapes(tiledMap, 32, world);
 		
         BodyDef def = new BodyDef();
-		def.position.set(new Vector2(1, 1));
+		def.position.set(new Vector2(dungeon.getxSize()/2, dungeon.getySize()));
 		def.type = BodyType.DynamicBody; 
 		def.angularDamping = 1.0f;
 		
 		body = world.createBody(def);
 		
 		CircleShape cir = new CircleShape();
-		cir.setRadius(0.5f);
+		cir.setRadius(0.4f);
 		
 		FixtureDef fDef = new FixtureDef();
 		fDef.shape = cir;

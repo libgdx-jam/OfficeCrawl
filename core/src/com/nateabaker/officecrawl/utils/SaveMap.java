@@ -2,9 +2,12 @@ package com.nateabaker.officecrawl.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 
 public class SaveMap {
 	public static void saveDungeon(Dungeon dungeon, String fileName){
+		CreatePolyline q = new CreatePolyline();
+		q.createPolyline(dungeon);
 		String dungeonFile = ""
 				+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+"	<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"right-down\" width=\"100\" height=\"100\" tilewidth=\"32\" tileheight=\"32\" nextobjectid=\"22\">\n"
@@ -28,18 +31,9 @@ public class SaveMap {
 		dungeonFile += "\n		</data>\n" + "	</layer>\n";
 		int objectID = 0;
 		dungeonFile += "	<objectgroup name=\"collisionLayer\">\n";
-		int x = 0;
-		int y = 0;
-		for (int i = 1; i < dungeon.getCollisionLayer().length; i++) {
-			x = i % 100;
-			if (x == 0) {
-				y++;
-			}
-			if (dungeon.getCollisionLayer()[i] == true) {
-				dungeonFile += "		<object id=\"" + objectID + "\" name=\"CollsionBox\" type=\"Corridor\" x=\""
-						+ x * 32 + "\" y=\"" + y * 32 + "\" width=\"32\" height=\"32\"/>\n";
-				objectID++;
-			}
+		Array<String> polyLines = CreatePolyline.createPolyline(dungeon);
+		for(int i = 0; i < polyLines.size; i ++){
+			dungeonFile += polyLines.get(i);
 		}
 		dungeonFile += "	</objectgroup>\n";
 
