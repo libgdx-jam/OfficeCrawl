@@ -1,0 +1,8 @@
+MapBodyBuilder by:
+	Sion Dream
+with revissions by:
+	daemonaka - https://github.com/daemonaka
+Dungeon Genrator base on work by:
+	Solarnus http://www.roguebasin.com/index.php?title=Java_Example_of_Dungeon-Building_Algorithm
+With java conversion by 
+	Ted Brown http://openprocessing.org/sketch/18822
