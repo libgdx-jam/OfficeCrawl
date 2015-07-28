@@ -75,3 +75,11 @@ desktop/Maps/test.tmx
 .gradle
 android/.settings/org.eclipse.jdt.core.prefs
 /android/
+desktop/src/com/nateabaker/officecrawl/desktop/DesktopLauncher.java
+*.class
+desktop/bin/com/nateabaker/officecrawl/desktop/DesktopLauncher.class
+core/.settings/org.eclipse.jdt.core.prefs
+android/bin/AndroidManifest.xml
+android/.classpath
+.gradle/2.2/taskArtifacts/cache.properties.lock
+.project

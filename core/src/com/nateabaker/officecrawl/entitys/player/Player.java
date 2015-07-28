@@ -44,7 +44,7 @@ public class Player implements Entity {
 	}
 	@Override
 	public void update(float delta) {
-
+		
 	}
 
 	public Body getBody() {
@@ -53,8 +53,8 @@ public class Player implements Entity {
 
 	@Override
 	public Vector2 getPosition() {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO Auto-gen,erated method stub
+		return position;
 	}
 
 	public float getSpeed() {

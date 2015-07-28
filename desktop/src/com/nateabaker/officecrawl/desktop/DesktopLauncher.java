@@ -3,8 +3,8 @@ package com.nateabaker.officecrawl.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.nateabaker.officecrawl.OfficeCrawl;
+import com.sun.scenario.Settings;
 
 public class DesktopLauncher {
 	public static void main(String[] arg) {
