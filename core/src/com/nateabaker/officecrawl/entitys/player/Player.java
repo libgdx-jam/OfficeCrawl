@@ -69,4 +69,10 @@ public class Player implements Entity {
 
 	}
 
+	@Override
+	public void disposeable() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

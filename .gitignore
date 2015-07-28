@@ -71,3 +71,7 @@ desktop/Maps/test.tmx
 android/.classpath
 desktop/.classpath
 desktop/Maps/test.tmx
+.project
+.gradle
+android/.settings/org.eclipse.jdt.core.prefs
+/android/
