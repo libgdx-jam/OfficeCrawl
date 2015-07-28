@@ -19,111 +19,113 @@ import com.badlogic.gdx.utils.Array;
 import com.nateabaker.officecrawl.EntityManager;
 import com.nateabaker.officecrawl.entitys.Entity;
 import com.nateabaker.officecrawl.entitys.player.Player;
+import com.nateabaker.officecrawl.gui.GUI;
 import com.nateabaker.officecrawl.utils.Dungeon;
 import com.nateabaker.officecrawl.utils.DungeonGenerator;
 import com.nateabaker.officecrawl.utils.MapBodyBuilder;
 import com.nateabaker.officecrawl.utils.SaveMap;
 
 public class GameScreen implements Screen {
-    private Texture img;
-    
-    private OrthographicCamera camera;
-    
-    private TiledMap tiledMap;
-    private TiledMapRenderer tiledMapRenderer;
-    
-    private World world;
-    private Body body;
-    
-    private EntityManager entityManager = new EntityManager();
-    
-    private Box2DDebugRenderer renderer;
+	private Texture img;
+
+	private OrthographicCamera camera;
+
+	private TiledMap tiledMap;
+	private TiledMapRenderer tiledMapRenderer;
+
+	private World world;
+	private Body body;
+
+	private EntityManager entityManager = new EntityManager();
+
+	private Box2DDebugRenderer renderer;
+
+	private GUI gui = new GUI();
 
 	@Override
 	public void show() {
-        float w = 20;
-        float h = 15;
+		float w = 20;
+		float h = 15;
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
-        camera.translate(50,50);
-        camera.update();
-        
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, w, h);
+		camera.translate(50, 50);
+		camera.update();
 
-        
-        Dungeon dungeon = new Dungeon(100, 100, MathUtils.random(150, 200), "Office01.png");
-        DungeonGenerator.createDungeon(dungeon);
-        SaveMap.saveDungeon(dungeon,"test.tmx");
-        
-        tiledMap = new TmxMapLoader().load("Maps/test.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 0.03125f);
-     
-        world = new World(new Vector2(0, 0), true);
-        
-        Array<Body> bodies = MapBodyBuilder.buildShapes(tiledMap, 32, world);
-		
-        entityManager.getEntitys().add(new Player(new Vector2(50, 50), world ));
-		
+		Dungeon dungeon = new Dungeon(100, 100, MathUtils.random(150, 200),
+				"Office01.png");
+		DungeonGenerator.createDungeon(dungeon);
+		SaveMap.saveDungeon(dungeon, "test.tmx");
+
+		tiledMap = new TmxMapLoader().load("Maps/test.tmx");
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 0.03125f);
+
+		world = new World(new Vector2(0, 0), true);
+
+		Array<Body> bodies = MapBodyBuilder.buildShapes(tiledMap, 32, world);
+
+		entityManager.getEntitys().add(new Player(new Vector2(50, 50), world));
+
 		renderer = new Box2DDebugRenderer();
 		renderer.setDrawBodies(true);
 	}
 
 	@Override
 	public void render(float delta) {
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
-			 camera.translate(-1,0);
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-			 camera.translate(+1,0);
-		if(Gdx.input.isKeyPressed(Input.Keys.UP))
-			 camera.translate(0,+1);
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
-			 camera.translate(0,-1);
-		
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
-        camera.update();
-        
-        tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
-        
-        world.step(1/60f, 6, 2);
-        for(Entity e: entityManager.getEntitys()){
-        	e.update(delta);
-        }
-        renderer.render(world, camera.combined);
-		
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+			camera.translate(-1, 0);
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+			camera.translate(+1, 0);
+		if (Gdx.input.isKeyPressed(Input.Keys.UP))
+			camera.translate(0, +1);
+		if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+			camera.translate(0, -1);
+
+		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		camera.update();
+
+		tiledMapRenderer.setView(camera);
+		tiledMapRenderer.render();
+
+		world.step(1 / 60f, 6, 2);
+		for (Entity e : entityManager.getEntitys()) {
+			e.update(delta);
+		}
+		renderer.render(world, camera.combined);
+
+		gui.update(delta);
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		gui.resize(width, height);
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		gui.dispose();
 	}
 
 }
