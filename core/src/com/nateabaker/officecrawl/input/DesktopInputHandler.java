@@ -46,18 +46,12 @@ public class DesktopInputHandler implements InputProcessor {
 
 		// Begin player controls
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			player.getBody().applyForce(new Vector2(0, player.getSpeed()),
-					player.getBody().getWorldCenter(), true);
+			player.getBody().applyForce(new Vector2(MathUtils.cos(player.getRotation()),MathUtils.sin(player.getRotation())), player.getBody().getWorldCenter(), true);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			player.getBody().applyForce(new Vector2(0, -player.getSpeed()),player.getBody().getWorldCenter(), true);
+			player.getBody().applyForce(new Vector2(-MathUtils.cos(player.getRotation()),-MathUtils.sin(player.getRotation())), player.getBody().getWorldCenter(), true);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			player.getBody().applyForce(new Vector2(player.getSpeed(), 0), player.getBody().getWorldCenter(), true);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			player.getBody().applyForce(new Vector2(-player.getSpeed(), 0), player.getBody().getWorldCenter(), true);
-		}
+
 		// End player controls
 	}
 
@@ -100,7 +94,7 @@ public class DesktopInputHandler implements InputProcessor {
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		Vector3 mouse = camera.unproject(new Vector3(screenX, screenY, 0));
-		player.setRotation((MathUtils.atan2(mouse.x-player.getBody().getPosition().x, mouse.y-player.getBody().getPosition().y))*MathUtils.radDeg);
+		player.setRotation(MathUtils.atan2( mouse.y-player.getBody().getPosition().y, mouse.x-player.getBody().getPosition().x));
 		return false;
 	}
 

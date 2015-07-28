@@ -83,3 +83,6 @@ android/bin/AndroidManifest.xml
 android/.classpath
 .gradle/2.2/taskArtifacts/cache.properties.lock
 .project
+android/.settings/org.eclipse.jdt.core.prefs
+.project
+*.class

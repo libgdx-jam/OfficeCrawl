@@ -67,10 +67,10 @@ public class Player implements Entity {
 
 	}
 	public float getRotation() {
-		return rotation;
+		return body.getAngle();
 	}
 	public void setRotation(float rotation) {
-		this.rotation = rotation;
+		body.setTransform(body.getPosition().x, body.getPosition().y, rotation);
 	}
 
 
