@@ -18,6 +18,7 @@ public class Player implements Entity {
 	World world;
 	float speed = 5;
 	private Vector2 zero = new Vector2();
+	private String sprite = "entitys'player.png";
 
 	public Player(Vector2 startPosition, World world) {
 		this.world = world;
@@ -72,7 +73,11 @@ public class Player implements Entity {
 	@Override
 	public void disposeable() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public int getRotation() {
+		return 0;
 	}
 
 }

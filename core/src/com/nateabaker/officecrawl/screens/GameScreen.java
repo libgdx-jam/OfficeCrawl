@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.nateabaker.officecrawl.Assets;
 import com.nateabaker.officecrawl.EntityManager;
 import com.nateabaker.officecrawl.entitys.Entity;
 import com.nateabaker.officecrawl.entitys.player.Player;
@@ -27,8 +29,6 @@ import com.nateabaker.officecrawl.utils.MapBodyBuilder;
 import com.nateabaker.officecrawl.utils.SaveMap;
 
 public class GameScreen implements Screen {
-	private Texture img;
-
 	private OrthographicCamera camera;
 
 	private TiledMap tiledMap;
@@ -38,6 +38,8 @@ public class GameScreen implements Screen {
 	private Body body;
 
 	private EntityManager entityManager = new EntityManager();
+
+	private SpriteBatch batch;
 
 	private Box2DDebugRenderer renderer;
 
@@ -69,30 +71,19 @@ public class GameScreen implements Screen {
 		player = new Player(new Vector2(50, 50), world);
 		entityManager.getEntitys().add(player);
 
+		batch = new SpriteBatch(100);
+
 		renderer = new Box2DDebugRenderer();
 		renderer.setDrawBodies(true);
 	}
 
 	@Override
 	public void render(float delta) {
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-			camera.translate(-1, 0);
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-			camera.translate(+1, 0);
-		if (Gdx.input.isKeyPressed(Input.Keys.UP))
-			camera.translate(0, +1);
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-			camera.translate(0, -1);
-
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		camera.position.set(player.getBody().getPosition(), 0);
 		camera.update();
-
-		tiledMapRenderer.setView(camera);
-		if (gui.debug != true)
-			tiledMapRenderer.render();
 
 		world.step(1 / 60f, 6, 2);
 		player.update(delta);
@@ -102,6 +93,19 @@ public class GameScreen implements Screen {
 			}
 		}
 
+		tiledMapRenderer.setView(camera);
+		if (gui.debug != true)
+			tiledMapRenderer.render();
+		if (gui.debug == false) {
+			batch.setProjectionMatrix(camera.combined);
+			batch.begin();
+
+			batch.draw(Assets.player.reg,
+					player.getBody().getPosition().x - 0.5f, player.getBody()
+							.getPosition().y - 0.5f, 0, 0, 1, 1, 1, 1, player
+							.getRotation());
+			batch.end();
+		}
 		if (gui.debug == true)
 			renderer.render(world, camera.combined);
 
