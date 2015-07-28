@@ -16,7 +16,7 @@ public class Player implements Entity {
 	Vector2 position;
 	Body body;
 	World world;
-	float speed = 1;
+	float speed = 5;
 	private Vector2 zero = new Vector2();
 
 	public Player(Vector2 startPosition, World world) {
@@ -66,8 +66,6 @@ public class Player implements Entity {
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			body.applyForce(new Vector2(-speed, 0), body.getWorldCenter(), true);
 		}
-
-		body.setLinearVelocity(zero);
 
 	}
 

@@ -1,9 +1,6 @@
 package com.nateabaker.officecrawl.gui;
 
-import javafx.scene.control.Cell;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -44,6 +41,11 @@ public class GUI {
 	}
 
 	public void update(float delta) {
+		if (debug) {
+			table.debug();
+		} else {
+			table.setDebug(false);
+		}
 		stage.act();
 		stage.draw();
 	}

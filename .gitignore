@@ -63,3 +63,10 @@ build/
 ## OS Specific
 .DS_Store
 desktop/Maps/test.tmx
+.gradle/2.2/taskArtifacts/cache.properties.lock
+*.lock
+.gradle/2.2/taskArtifacts/fileHashes.bin
+.gradle/2.2/taskArtifacts/outputFileStates.bin
+.project
+android/.classpath
+desktop/.classpath

@@ -85,14 +85,13 @@ public class GameScreen implements Screen {
 			camera.translate(0, -1);
 
 		Gdx.gl.glClearColor(1, 0, 0, 1);
-		// Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		camera.position.set(player.getBody().getPosition(), 0);
 		camera.update();
 
 		tiledMapRenderer.setView(camera);
-		tiledMapRenderer.render();
+	//	tiledMapRenderer.render();
 
 		world.step(1 / 60f, 6, 2);
 		player.update(delta);
@@ -107,6 +106,17 @@ public class GameScreen implements Screen {
 
 		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
 			gui.debug = !gui.debug;
+		}
+
+		if (Gdx.input.isKeyJustPressed(Keys.G)) {
+			for (int i = 0; i < player.getBody().getFixtureList().size; i++) {
+				player.getBody()
+						.getFixtureList()
+						.get(i)
+						.setSensor(
+								!player.getBody().getFixtureList().get(i)
+										.isSensor());
+			}
 		}
 
 	}
