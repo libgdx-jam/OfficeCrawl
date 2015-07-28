@@ -1,12 +1,12 @@
 package com.nateabaker.officecrawl.screens;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -23,6 +23,7 @@ import com.nateabaker.officecrawl.EntityManager;
 import com.nateabaker.officecrawl.entitys.Entity;
 import com.nateabaker.officecrawl.entitys.player.Player;
 import com.nateabaker.officecrawl.gui.GUI;
+import com.nateabaker.officecrawl.input.DesktopInputHandler;
 import com.nateabaker.officecrawl.utils.Dungeon;
 import com.nateabaker.officecrawl.utils.DungeonGenerator;
 import com.nateabaker.officecrawl.utils.MapBodyBuilder;
@@ -46,6 +47,9 @@ public class GameScreen implements Screen {
 	private GUI gui = new GUI();
 
 	private Player player;
+
+	private InputMultiplexer input;
+	DesktopInputHandler desktop;
 
 	@Override
 	public void show() {
@@ -75,12 +79,24 @@ public class GameScreen implements Screen {
 
 		renderer = new Box2DDebugRenderer();
 		renderer.setDrawBodies(true);
+
+		input = new InputMultiplexer();
+		input.addProcessor(gui.getStage());
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			desktop = new DesktopInputHandler(gui, player, camera);
+			input.addProcessor(desktop);
+		}
+		Gdx.input.setInputProcessor(input);
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(1, 0, 0, 1);
+
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			desktop.update();
+		}
 
 		camera.position.set(player.getBody().getPosition(), 0);
 		camera.update();
@@ -110,21 +126,6 @@ public class GameScreen implements Screen {
 			renderer.render(world, camera.combined);
 
 		gui.update(delta);
-
-		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-			gui.debug = !gui.debug;
-		}
-
-		if (Gdx.input.isKeyJustPressed(Keys.G)) {
-			for (int i = 0; i < player.getBody().getFixtureList().size; i++) {
-				player.getBody()
-						.getFixtureList()
-						.get(i)
-						.setSensor(
-								!player.getBody().getFixtureList().get(i)
-										.isSensor());
-			}
-		}
 
 	}
 

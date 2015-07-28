@@ -13,10 +13,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.nateabaker.officecrawl.entitys.Entity;
 
 public class Player implements Entity {
-	Vector2 position;
-	Body body;
-	World world;
-	float speed = 5;
+	private Vector2 position;
+	private Body body;
+	private World world;
+	private float speed = 5;
+	private float rotation = 0;
 	private Vector2 zero = new Vector2();
 	private String sprite = "entitys'player.png";
 
@@ -41,6 +42,10 @@ public class Player implements Entity {
 
 		Fixture fixture = body.createFixture(fDef);
 	}
+	@Override
+	public void update(float delta) {
+
+	}
 
 	public Body getBody() {
 		return body;
@@ -52,22 +57,8 @@ public class Player implements Entity {
 		return null;
 	}
 
-	@Override
-	public void update(float delta) {
-
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			body.applyForce(new Vector2(0, speed), body.getWorldCenter(), true);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			body.applyForce(new Vector2(0, -speed), body.getWorldCenter(), true);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			body.applyForce(new Vector2(speed, 0), body.getWorldCenter(), true);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			body.applyForce(new Vector2(-speed, 0), body.getWorldCenter(), true);
-		}
-
+	public float getSpeed() {
+		return speed;
 	}
 
 	@Override
@@ -75,9 +66,12 @@ public class Player implements Entity {
 		// TODO Auto-generated method stub
 
 	}
-
-	public int getRotation() {
-		return 0;
+	public float getRotation() {
+		return rotation;
 	}
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+	}
+
 
 }

@@ -57,6 +57,10 @@ public class GUI {
 		fpsLabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
 	}
 
+	public Stage getStage() {
+		return stage;
+	}
+
 	public void resize(int width, int height) {
 		// stage.getViewport().setScreenSize(width, height);
 	}
