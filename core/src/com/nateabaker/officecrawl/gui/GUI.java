@@ -12,14 +12,13 @@ import com.badlogic.gdx.utils.Align;
 
 public class GUI {
 
-	Stage stage;
-	OrthographicCamera camera;
-	Table table;
-	Skin skin;
+	private Stage stage;
+	private Table table;
+	private Skin skin;
+	public boolean debug = true;
 
 	public GUI() {
 		stage = new Stage();
-		camera = new OrthographicCamera(160, 90);
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
 		/** Begin table */

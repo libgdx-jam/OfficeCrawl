@@ -3,6 +3,7 @@ package com.nateabaker.officecrawl.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,6 +43,8 @@ public class GameScreen implements Screen {
 
 	private GUI gui = new GUI();
 
+	private Player player;
+
 	@Override
 	public void show() {
 		float w = 20;
@@ -63,8 +66,8 @@ public class GameScreen implements Screen {
 		world = new World(new Vector2(0, 0), true);
 
 		Array<Body> bodies = MapBodyBuilder.buildShapes(tiledMap, 32, world);
-
-		entityManager.getEntitys().add(new Player(new Vector2(50, 50), world));
+		player = new Player(new Vector2(50, 50), world);
+		entityManager.getEntitys().add(player);
 
 		renderer = new Box2DDebugRenderer();
 		renderer.setDrawBodies(true);
@@ -82,21 +85,29 @@ public class GameScreen implements Screen {
 			camera.translate(0, -1);
 
 		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		// Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		camera.position.set(player.getBody().getPosition(), 0);
 		camera.update();
 
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
 
 		world.step(1 / 60f, 6, 2);
+		player.update(delta);
 		for (Entity e : entityManager.getEntitys()) {
-			e.update(delta);
+			if (!(e instanceof Player)) {
+				e.update(delta);
+			}
 		}
 		renderer.render(world, camera.combined);
 
 		gui.update(delta);
+
+		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+			gui.debug = !gui.debug;
+		}
 
 	}
 
