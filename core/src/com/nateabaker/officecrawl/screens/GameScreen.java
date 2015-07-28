@@ -91,7 +91,8 @@ public class GameScreen implements Screen {
 		camera.update();
 
 		tiledMapRenderer.setView(camera);
-	//	tiledMapRenderer.render();
+		if (gui.debug != true)
+			tiledMapRenderer.render();
 
 		world.step(1 / 60f, 6, 2);
 		player.update(delta);
@@ -100,7 +101,9 @@ public class GameScreen implements Screen {
 				e.update(delta);
 			}
 		}
-		renderer.render(world, camera.combined);
+
+		if (gui.debug == true)
+			renderer.render(world, camera.combined);
 
 		gui.update(delta);
 

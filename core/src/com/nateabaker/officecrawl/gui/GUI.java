@@ -2,6 +2,7 @@ package com.nateabaker.officecrawl.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -13,6 +14,8 @@ public class GUI {
 	private Table table;
 	private Skin skin;
 	public boolean debug = true;
+	private Label fpsLabel;
+	private int fps = 0;
 
 	public GUI() {
 		stage = new Stage();
@@ -23,12 +26,15 @@ public class GUI {
 		table = new Table(skin);
 		table.setFillParent(true);
 		table.debug();
+
+		fpsLabel = new Label("fps" + fps, skin);
+
 		TextButton button = new TextButton("1", skin);
 		TextButton button2 = new TextButton("2", skin);
 		TextButton button3 = new TextButton("3", skin);
 		TextButton button4 = new TextButton("4", skin);
 
-		table.add("").expand(30, 10).align(Align.bottom).fill(0.8f, 0);
+		table.add(fpsLabel).expand(30, 10).align(Align.bottom).fill(0.8f, 0);
 		table.add(button).expand(30, 10).align(Align.bottom).fill(0.8f, 0);
 		table.add(button2).expand(30, 10).align(Align.bottom).fill(0.8f, 0);
 		table.add(button3).expand(30, 10).align(Align.bottom).fill(0.8f, 0);
@@ -48,6 +54,7 @@ public class GUI {
 		}
 		stage.act();
 		stage.draw();
+		fpsLabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
 	}
 
 	public void resize(int width, int height) {
