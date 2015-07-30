@@ -19,7 +19,7 @@ public class Player implements Entity {
 	private float speed = 5;
 	private float rotation = 0;
 	private Vector2 zero = new Vector2();
-	private String sprite = "entitys'player.png";
+
 
 	public Player(Vector2 startPosition, World world) {
 		this.world = world;

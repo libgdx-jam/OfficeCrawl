@@ -117,9 +117,9 @@ public class GameScreen implements Screen {
 			batch.begin();
 
 			batch.draw(Assets.player.reg,
-					player.getBody().getPosition().x - 0.5f, player.getBody()
-							.getPosition().y - 0.5f, 0, 0, 1, 1, 1, 1, player
-							.getRotation());
+					player.getBody().getPosition().x, player.getBody()
+							.getPosition().y, -0.5f, -1, 1, 1, 1, 1, player
+							.getRotation()*MathUtils.radDeg);
 			batch.end();
 		}
 		if (gui.debug == true)
